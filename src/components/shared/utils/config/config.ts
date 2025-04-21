@@ -59,10 +59,12 @@ const getDefaultServerURL = () => {
     const loginid = window.localStorage.getItem('active_loginid') ?? active_loginid_from_url;
     const is_real = loginid && !/^(VRT|VRW)/.test(loginid);
 
-    const server = is_real ? 'green' : 'blue';
-    const server_url = `${server}.derivws.com`;
+    const server = is_real ? 'green' : 'blue'; // <- likely hitting blue here
+    console.log('Using loginid:', loginid, '→ server:', server);
 
+    const server_url = `${server}.derivws.com`;
     return server_url;
+
 };
 
 export const getDefaultAppIdAndUrl = () => {
