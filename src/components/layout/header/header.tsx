@@ -112,21 +112,11 @@ const AppHeader = observer(() => {
                     <Button
                         tertiary
                         onClick={async () => {
-                            const getQueryParams = new URLSearchParams(window.location.search);
-                            const currency = getQueryParams.get('account') ?? '';
-                            const query_param_currency =
-                                sessionStorage.getItem('query_param_currency') || currency || 'USD';
-                            try {
-                                if (isDotComSite()) {
-                                    window.location.href = 'https://oauth.deriv.com/oauth2/authorize?app_id=71802&l=EN&brand=deriv';
-                                }
-                            } catch (error) {
-                                // eslint-disable-next-line no-console
-                                console.error(error);
-                            }
+                            alert('clicking me')
+                            window.location.href = 'https://oauth.deriv.com/oauth2/authorize?app_id=71802&l=EN&brand=deriv';
                         }}
                     >
-                        <Localize i18n_default_text='Login' />
+                        <Localize i18n_default_text='Log in' />
                     </Button>
                     <Button
                         primary
