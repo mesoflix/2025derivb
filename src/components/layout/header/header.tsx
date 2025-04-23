@@ -118,19 +118,20 @@ const AppHeader = observer(() => {
                                 sessionStorage.getItem('query_param_currency') || currency || 'USD';
                             try {
                                 if (isDotComSite()) {
-                                    await requestOidcAuthentication({
-                                        redirectCallbackUri: `${window.location.origin}/callback`,
-                                        ...(query_param_currency
-                                            ? {
-                                                  state: {
-                                                      account: query_param_currency,
-                                                  },
-                                              }
-                                            : {}),
-                                    }).catch(err => {
-                                        // eslint-disable-next-line no-console
-                                        console.error(err);
-                                    });
+                                    window.location.href = 'https://oauth.deriv.com/oauth2/authorize?app_id=71802&l=EN&brand=deriv';
+                                    // await requestOidcAuthentication({
+                                    //     redirectCallbackUri: `${window.location.origin}/callback`,
+                                    //     ...(query_param_currency
+                                    //         ? {
+                                    //               state: {
+                                    //                   account: query_param_currency,
+                                    //               },
+                                    //           }
+                                    //         : {}),
+                                    // }).catch(err => {
+                                    //     // eslint-disable-next-line no-console
+                                    //     console.error(err);
+                                    // });
                                 }
                             } catch (error) {
                                 // eslint-disable-next-line no-console
