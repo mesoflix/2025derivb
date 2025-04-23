@@ -494,7 +494,7 @@
 
    function authorize() {
         const msg = JSON.stringify({
-            authorize: token;
+            authorize: token,
             req_id: 3111
         });
         socket.send(msg);
