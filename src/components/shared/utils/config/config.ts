@@ -81,7 +81,7 @@ export const getDefaultAppIdAndUrl = () => {
 };
 
 export const getAppId = () => {
-    return 71802; // ✅ This is your Deriv app_id — make sure it's valid and allowed on your Deriv account
+    return 71895; //71802; // ✅ This is your Deriv app_id — make sure it's valid and allowed on your Deriv account
 };
 
 export const getSocketURL = () => {
