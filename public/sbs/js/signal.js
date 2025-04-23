@@ -1,3 +1,5 @@
+var APP_ID = '71802';
+
 const progress = document.getElementById("progress");
 const countdownEl = document.getElementById("countdown");
 const signalDurationEl = document.getElementById("signal-duration");

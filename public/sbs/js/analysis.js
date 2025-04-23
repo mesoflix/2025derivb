@@ -1,5 +1,5 @@
 (function () {
-    
+    var APP_ID = '71802';
     var tokens = localStorage.getItem('tokens');
     let tokensArray;
     if (tokens) {

@@ -32,6 +32,10 @@ const SignalPage = lazy(() => import('../signal/signal')); // Assuming you creat
 const InvestPage = lazy(() => import('../invest/invest')); // Assuming you created InvestPage.tsx
 const ChartWrapper = lazy(() => import('../chart/chart-wrapper'));
 const Tutorial = lazy(() => import('../tutorials'));
+const Analysis = lazy(() => import('../analysis/analysis'));
+const Tool = lazy(() => import('../tool/tool'));
+const Copy = lazy(() => import('../copy/copy'));
+//const Tutorial = lazy(() => import('../tutorials'));
 
 const AppWrapper = observer(() => {
     const { connectionStatus } = useApiBase();
@@ -61,7 +65,7 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'ai', 'bots', 'signal', 'invest'];
+    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'analysis', 'tool', 'bots', 'ai', 'signal', 'invest'];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -215,7 +219,110 @@ const AppWrapper = observer(() => {
                             </Suspense>
                         </div>
 
+                        <div
+                            label={
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                        className='icon-general-fill-g-path'
+                                    />
+                                    <Localize i18n_default_text='Tutorials' />
+                                </>
+                            }
+                            id='id-tutorials'
+                        >
+                            <div className='tutorials-wrapper'>
+                                <Suspense
+                                    fallback={<ChunkLoader message={localize('Please wait, loading tutorials...')} />}
+                                >
+                                    <Tutorial handleTabChange={handleTabChange} />
+                                </Suspense>
+                            </div>
+                        </div>
+
                         {/* Add links to new AI, Bots, Signal, and Invest pages */}
+                        <div
+                            label={(
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                    />
+                                    <Localize i18n_default_text={localize('Smart analysis')} />
+                                </>
+                            )}
+                            id='id-analysis'
+                            onClick={() => handleLinkChange('analysis')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading page...')} />}>
+                                <Analysis />
+                            </Suspense>
+                        </div>
+
+                        <div
+                            label={(
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                    />
+                                    <Localize i18n_default_text={localize('Analysis tool')} />
+                                </>
+                            )}
+                            id='id-tool'
+                            onClick={() => handleLinkChange('tool')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading  page...')} />}>
+                                <Tool />
+                            </Suspense>
+                        </div>
+
+                        <div
+                            label={(
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                    />
+                                    <Localize i18n_default_text={localize('Free bots')} />
+                                </>
+                            )}
+                            id='id-bots'
+                            onClick={() => handleLinkChange('bots')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}>
+                                <BotsPage />
+                            </Suspense>
+                        </div>
+
+                        <div
+                            label={(
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                    />
+                                    <Localize i18n_default_text={localize('Copytrade')} />
+                                </>
+                            )}
+                            id='id-copy'
+                            onClick={() => handleLinkChange('copy')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading  page...')} />}>
+                                <Copy />
+                            </Suspense>
+                        </div>
+
                         <div
                             label={(
                                 <>
@@ -233,26 +340,6 @@ const AppWrapper = observer(() => {
                         >
                             <Suspense fallback={<ChunkLoader message={localize('Please wait, loading AI page...')} />}>
                                 <AiPage />
-                            </Suspense>
-                        </div>
-
-                        <div
-                            label={(
-                                <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
-                                    <Localize i18n_default_text={localize('Bots')} />
-                                </>
-                            )}
-                            id='id-bots'
-                            onClick={() => handleLinkChange('bots')}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}>
-                                <BotsPage />
                             </Suspense>
                         </div>
 

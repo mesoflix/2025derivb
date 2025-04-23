@@ -1,3 +1,4 @@
+var APP_ID = '71802';
 
 let ws1;
 if (ws1) {
