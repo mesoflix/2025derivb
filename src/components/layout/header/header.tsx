@@ -126,7 +126,7 @@ const AppHeader = observer(() => {
                             }
                         }}
                     >
-                        <Localize i18n_default_text='Log in' />
+                        <Localize i18n_default_text='Login' />
                     </Button>
                     <Button
                         primary
