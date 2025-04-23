@@ -20,6 +20,11 @@ import MobileMenu from './mobile-menu';
 import PlatformSwitcher from './platform-switcher';
 import './header.scss';
 
+// SBS imports
+import { ArrowDownCircle, ArrowUpCircle, Mail } from 'lucide-react';
+import { useState } from 'react';
+import { Menu } from 'lucide-react'; // Import Menu icon
+
 const AppHeader = observer(() => {
     const { isGBLoaded, isGBAvailable } = useIsGrowthbookIsLoaded();
     const { isDesktop } = useDevice();
@@ -33,6 +38,8 @@ const AppHeader = observer(() => {
     const currency = getCurrency?.();
     const { localize } = useTranslations();
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false); // Track menu state
+
     const renderAccountSection = () => {
         if (isAuthorizing) {
             return <AccountsInfoLoader isLoggedIn isMobile={!isDesktop} speed={3} />;
@@ -43,17 +50,13 @@ const AppHeader = observer(() => {
                     {isDesktop &&
                         (() => {
                             const redirect_url = new URL(standalone_routes.personal_details);
-                            // Check if the account is a demo account
-                            // Use the URL parameter to determine if it's a demo account, as this will update when the account changes
                             const urlParams = new URLSearchParams(window.location.search);
                             const account_param = urlParams.get('account');
                             const is_virtual = client?.is_virtual || account_param === 'demo';
 
                             if (is_virtual) {
-                                // For demo accounts, set the account parameter to 'demo'
                                 redirect_url.searchParams.set('account', 'demo');
                             } else if (currency) {
-                                // For real accounts, set the account parameter to the currency
                                 redirect_url.searchParams.set('account', currency);
                             }
                             return (
@@ -138,11 +141,59 @@ const AppHeader = observer(() => {
             })}
         >
             <Wrapper variant='left'>
-                <AppLogo />
-                <MobileMenu />
-                {isDesktop && <MenuItems.TradershubLink />}
-                {isDesktop && <PlatformSwitcher />}
-                {isDesktop && <MenuItems />}
+                <h1 className='app-header__logo'>
+                    <span className='logo__sbs'>SBS</span><span className='logo__matthie'>MATTHIE</span>
+                </h1>
+                {isDesktop ? (
+                    <div className='mobile-menu'>
+                        <button onClick={() => window.location.href = '/withdraw'}>
+                            <ArrowUpCircle className='mobile-menu__icon' />
+                            Withdraw
+                        </button>
+                        <button onClick={() => window.location.href = '/deposit'}>
+                            <ArrowDownCircle className='mobile-menu__icon' />
+                            Deposit
+                        </button>
+                        <button onClick={() => window.location.href = '/contact'}>
+                            <Mail className='mobile-menu__icon' />
+                            Contact
+                        </button>
+                    </div>
+                ) : (
+                    <div className='mobile-menu-icon'>
+                        <Menu onClick={() => {
+                            alert('hhhhh'); // Check if this alert is triggered
+                            setIsMenuOpen(!isMenuOpen); // Toggle menu state
+                        }} className='mobile-menu-icon__button' />
+                    </div>
+                )}
+
+                {/* Added background and border for debugging */}
+                {isMenuOpen && !isDesktop && (
+                    <div className='mobile-menu' style={{ background: 'rgba(0, 0, 0, 0.7)', border: '2px solid red' }}>
+                        <button onClick={() => {
+                            alert('Withdraw clicked');
+                            window.location.href = '/withdraw';
+                        }}>
+                            <ArrowUpCircle className='mobile-menu__icon' />
+                            Withdraw
+                        </button>
+                        <button onClick={() => {
+                            alert('Deposit clicked');
+                            window.location.href = '/deposit';
+                        }}>
+                            <ArrowDownCircle className='mobile-menu__icon' />
+                            Deposit
+                        </button>
+                        <button onClick={() => {
+                            alert('Contact clicked');
+                            window.location.href = '/contact';
+                        }}>
+                            <Mail className='mobile-menu__icon' />
+                            Contact
+                        </button>
+                    </div>
+                )}
             </Wrapper>
             <Wrapper variant='right'>{renderAccountSection()}</Wrapper>
         </Header>

@@ -2,6 +2,9 @@
 @use 'components/shared/styles/mixins' as *;
 
 .app-header {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+
     &__account-settings {
         padding-inline-end: 1.2rem;
         border-inline-end: 0.1rem solid var(--general-section-1);
@@ -285,4 +288,177 @@
 
 .deriv-accordion--underline {
     border-bottom: none;
+}
+
+.app-header__logo {
+    font-size: 2rem !important;
+    font-weight: bold !important;
+    margin: 0 !important;
+    padding-left: 1rem !important;
+    user-select: none !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+
+    .logo__sbs {
+        color: #ffffff !important;
+    }
+
+    .logo__matthie {
+        color: orange !important;
+    }
+}
+
+.mobile-menu {
+    display: flex;
+    gap: 1rem;
+    padding-left: 1rem;
+
+    button {
+        background: none;
+        border: none;
+        color: #fff !important;
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+
+        &:hover {
+            color: orange !important;
+
+            .mobile-menu__icon {
+                stroke: orange !important;
+            }
+        }
+    }
+
+    &__icon {
+        stroke: orange !important;
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+}
+
+/* On mobile, change the color of the hamburger menu icon to orange */
+.mobile-menu-icon__button {
+    color: orange; /* Set the icon color to orange */
+    stroke-width: 2;
+    width: 30px;
+    height: 30px;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-icon__button {
+        color: orange; /* Set the icon color to orange for mobile */
+    }
+}
+
+/* Hide the menu on mobile by default */
+@media (max-width: 768px) {
+    .mobile-menu {
+        display: none !important;
+    }
+
+    .mobile-menu-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        cursor: pointer;
+    }
+
+    .mobile-menu-icon__button {
+        color: var(--text-prominent);
+        stroke-width: 2;
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Show the menu when it is toggled */
+    .mobile-menu.open {
+        display: block;
+    }
+}
+
+/* On desktop, show the menu */
+@media (min-width: 768px) {
+    .mobile-menu {
+        display: flex !important;
+        gap: 1rem;
+        padding-left: 1rem;
+    }
+}
+
+
+
+
+
+/* Ensure mobile menu icon is orange on mobile screens */
+@media (max-width: 768px) {
+    .mobile-menu-icon__button {
+        width: 30px;
+        height: 30px;
+    }
+
+    .mobile-menu-icon__button svg {
+        stroke: orange !important;
+        fill: orange !important;
+    }
+}
+
+/* On mobile, change the color of the hamburger menu icon to orange */
+.mobile-menu-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.mobile-menu-icon__button {
+    color: orange !important;
+    stroke-width: 2;
+    width: 30px;
+    height: 30px;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-icon__button {
+        color: orange !important; /* Set the icon color to orange */
+    }
+}
+
+/* Hide the menu on mobile by default */
+@media (max-width: 768px) {
+    .mobile-menu {
+        display: none !important;
+    }
+
+    .mobile-menu-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        cursor: pointer;
+    }
+
+    .mobile-menu-icon__button {
+        color: var(--text-prominent);
+        stroke-width: 2;
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Show the menu when it is toggled */
+    .mobile-menu.open {
+        display: block;
+    }
+}
+
+/* On desktop, show the menu */
+@media (min-width: 769px) {
+    .mobile-menu {
+        display: flex !important;
+    }
 }

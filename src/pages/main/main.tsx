@@ -7,7 +7,6 @@ import DesktopWrapper from '@/components/shared_ui/desktop-wrapper';
 import Dialog from '@/components/shared_ui/dialog';
 import MobileWrapper from '@/components/shared_ui/mobile-wrapper';
 import Tabs from '@/components/shared_ui/tabs/tabs';
-import TradingViewModal from '@/components/trading-view-chart/trading-view-modal';
 import { DBOT_TABS, TAB_IDS } from '@/constants/bot-contents';
 import { api_base, updateWorkspaceName } from '@/external/bot-skeleton';
 import { CONNECTION_STATUS } from '@/external/bot-skeleton/services/api/observables/connection-status-stream';
@@ -27,6 +26,10 @@ import ChartModal from '../chart/chart-modal';
 import Dashboard from '../dashboard';
 import RunStrategy from '../dashboard/run-strategy';
 
+const AiPage = lazy(() => import('../ai/ai')); // Assuming you created AiPage.tsx
+const BotsPage = lazy(() => import('../bots/bots')); // Assuming you created BotsPage.tsx
+const SignalPage = lazy(() => import('../signal/signal')); // Assuming you created SignalPage.tsx
+const InvestPage = lazy(() => import('../invest/invest')); // Assuming you created InvestPage.tsx
 const ChartWrapper = lazy(() => import('../chart/chart-wrapper'));
 const Tutorial = lazy(() => import('../tutorials'));
 
@@ -58,7 +61,7 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial'];
+    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'ai', 'bots', 'signal', 'invest'];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -98,7 +101,6 @@ const AppWrapper = observer(() => {
         if (active_tour !== '') {
             setActiveTour('');
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active_tab]);
 
     React.useEffect(() => {
@@ -116,16 +118,13 @@ const AppWrapper = observer(() => {
         }, 100);
 
         return () => {
-            clearTimeout(trashcan_init_id); // Clear the timeout on unmount
+            clearTimeout(trashcan_init_id);
         };
-        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active_tab, is_drawer_open]);
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
         if (dashboard_strategies.length > 0) {
-            // Needed to pass this to the Callback Queue as on tab changes
-            // document title getting override by 'Bot | Deriv' only
             timer = setTimeout(() => {
                 updateWorkspaceName();
             });
@@ -146,9 +145,12 @@ const AppWrapper = observer(() => {
                 }, 10);
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [active_tab]
     );
+
+    const handleLinkChange = (path: string) => {
+        navigate(`/${path}`);
+    };
 
     return (
         <React.Fragment>
@@ -162,11 +164,11 @@ const AppWrapper = observer(() => {
                         active_index={active_tab}
                         className='main__tabs'
                         onTabItemChange={onEntered}
-                        onTabItemClick={handleTabChange}
+                        onTabItemClick={(tab_index) => handleTabChange(tab_index)}
                         top
                     >
                         <div
-                            label={
+                            label={(
                                 <>
                                     <LabelPairedObjectsColumnCaptionRegularIcon
                                         height='24px'
@@ -175,13 +177,14 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Dashboard' />
                                 </>
-                            }
+                            )}
                             id='id-dbot-dashboard'
                         >
                             <Dashboard handleTabChange={handleTabChange} />
                         </div>
+
                         <div
-                            label={
+                            label={(
                                 <>
                                     <LabelPairedPuzzlePieceTwoCaptionBoldIcon
                                         height='24px'
@@ -190,11 +193,12 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Bot Builder' />
                                 </>
-                            }
+                            )}
                             id='id-bot-builder'
                         />
+
                         <div
-                            label={
+                            label={(
                                 <>
                                     <LabelPairedChartLineCaptionRegularIcon
                                         height='24px'
@@ -203,51 +207,108 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Charts' />
                                 </>
-                            }
-                            id={
-                                is_chart_modal_visible || is_trading_view_modal_visible
-                                    ? 'id-charts--disabled'
-                                    : 'id-charts'
-                            }
+                            )}
+                            id={is_chart_modal_visible || is_trading_view_modal_visible ? 'id-charts--disabled' : 'id-charts'}
                         >
                             <Suspense fallback={<ChunkLoader message={localize('Please wait, loading chart...')} />}>
                                 <ChartWrapper show_digits_stats={false} />
                             </Suspense>
                         </div>
+
+                        {/* Add links to new AI, Bots, Signal, and Invest pages */}
                         <div
-                            label={
+                            label={(
                                 <>
                                     <LegacyGuide1pxIcon
                                         height='16px'
                                         width='16px'
                                         fill='var(--text-general)'
-                                        className='icon-general-fill-g-path'
                                     />
-                                    <Localize i18n_default_text='Tutorials' />
+                                    <Localize i18n_default_text={localize('AI')} />
                                 </>
-                            }
-                            id='id-tutorials'
+                            )}
+                            id='id-ai'
+                            onClick={() => handleLinkChange('ai')}
+                            style={{ cursor: 'pointer' }}
                         >
-                            <div className='tutorials-wrapper'>
-                                <Suspense
-                                    fallback={<ChunkLoader message={localize('Please wait, loading tutorials...')} />}
-                                >
-                                    <Tutorial handleTabChange={handleTabChange} />
-                                </Suspense>
-                            </div>
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading AI page...')} />}>
+                                <AiPage />
+                            </Suspense>
+                        </div>
+
+                        <div
+                            label={(
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                    />
+                                    <Localize i18n_default_text={localize('Bots')} />
+                                </>
+                            )}
+                            id='id-bots'
+                            onClick={() => handleLinkChange('bots')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}>
+                                <BotsPage />
+                            </Suspense>
+                        </div>
+
+                        <div
+                            label={(
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                    />
+                                    <Localize i18n_default_text={localize('Signal')} />
+                                </>
+                            )}
+                            id='id-signal'
+                            onClick={() => handleLinkChange('signal')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Signal page...')} />}>
+                                <SignalPage />
+                            </Suspense>
+                        </div>
+
+                        <div
+                            label={(
+                                <>
+                                    <LegacyGuide1pxIcon
+                                        height='16px'
+                                        width='16px'
+                                        fill='var(--text-general)'
+                                    />
+                                    <Localize i18n_default_text={localize('Invest')} />
+                                </>
+                            )}
+                            id='id-invest'
+                            onClick={() => handleLinkChange('invest')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Invest page...')} />}>
+                                <InvestPage />
+                            </Suspense>
                         </div>
                     </Tabs>
                 </div>
             </div>
+
             <DesktopWrapper>
                 <div className='main__run-strategy-wrapper'>
                     <RunStrategy />
                     <RunPanel />
                 </div>
                 <ChartModal />
-                <TradingViewModal />
             </DesktopWrapper>
+
             <MobileWrapper>{!is_open && <RunPanel />}</MobileWrapper>
+
             <Dialog
                 cancel_button_text={cancel_button_text || localize('Cancel')}
                 className='dc-dialog__wrapper--fixed'
