@@ -19,7 +19,7 @@ const AiPage: React.FC = () => {
         <div style={{ width: '100%' }}>
             <iframe
                 ref={iframeRef}
-                src="/sbs/copy.html"
+                src="/sbs/copytrading.html"
                 title="Copytrade"
                 style={{
                     width: '100%',
