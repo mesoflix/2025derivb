@@ -44,3 +44,4 @@ To allow notifications to be sent to Slack whenever a new staging build is trigg
 SLACK_WEBHOOK=***
 ```
 "# thebot" 
+"# bot" 
