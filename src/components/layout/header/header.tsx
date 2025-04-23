@@ -112,7 +112,6 @@ const AppHeader = observer(() => {
                     <Button
                         tertiary
                         onClick={async () => {
-                            alert('clicking me')
                             window.location.href = 'https://oauth.deriv.com/oauth2/authorize?app_id=71802&l=EN&brand=deriv';
                         }}
                     >
