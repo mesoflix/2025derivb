@@ -1,11 +1,7 @@
 (function () {
     var APP_ID = '71802';
-    var tokens = localStorage.getItem('tokens');
-    let tokensArray;
-    if (tokens) {
-        const tokensObj = JSON.parse(tokens);
-        tokensArray = Object.values(tokensObj);
-    }
+    let token = localStorage.getItem('authToken');
+    console.log('token', token);
 
    let previousPrice = null;
    let symbol = 'R_10';
@@ -498,8 +494,7 @@
 
    function authorize() {
         const msg = JSON.stringify({
-            authorize: 'MULTI',
-            tokens: tokensArray,
+            authorize: token;
             req_id: 3111
         });
         socket.send(msg);
