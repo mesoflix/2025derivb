@@ -65,7 +65,18 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'analysis', 'tool', 'bots', 'ai', 'signal', 'invest'];
+    const hash = [
+        'dashboard',
+        'bot_builder',
+        'chart',
+        'tutorial',
+        'analysis',
+        'tool',
+        'bots',
+        'ai',
+        'signal',
+        'invest',
+    ];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -168,11 +179,11 @@ const AppWrapper = observer(() => {
                         active_index={active_tab}
                         className='main__tabs'
                         onTabItemChange={onEntered}
-                        onTabItemClick={(tab_index) => handleTabChange(tab_index)}
+                        onTabItemClick={tab_index => handleTabChange(tab_index)}
                         top
                     >
                         <div
-                            label={(
+                            label={
                                 <>
                                     <LabelPairedObjectsColumnCaptionRegularIcon
                                         height='24px'
@@ -181,14 +192,14 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Dashboard' />
                                 </>
-                            )}
+                            }
                             id='id-dbot-dashboard'
                         >
                             <Dashboard handleTabChange={handleTabChange} />
                         </div>
 
                         <div
-                            label={(
+                            label={
                                 <>
                                     <LabelPairedPuzzlePieceTwoCaptionBoldIcon
                                         height='24px'
@@ -197,12 +208,12 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Bot Builder' />
                                 </>
-                            )}
+                            }
                             id='id-bot-builder'
                         />
 
                         <div
-                            label={(
+                            label={
                                 <>
                                     <LabelPairedChartLineCaptionRegularIcon
                                         height='24px'
@@ -211,8 +222,12 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Charts' />
                                 </>
-                            )}
-                            id={is_chart_modal_visible || is_trading_view_modal_visible ? 'id-charts--disabled' : 'id-charts'}
+                            }
+                            id={
+                                is_chart_modal_visible || is_trading_view_modal_visible
+                                    ? 'id-charts--disabled'
+                                    : 'id-charts'
+                            }
                         >
                             <Suspense fallback={<ChunkLoader message={localize('Please wait, loading chart...')} />}>
                                 <ChartWrapper show_digits_stats={false} />
@@ -244,16 +259,12 @@ const AppWrapper = observer(() => {
 
                         {/* Add links to new AI, Bots, Signal, and Invest pages */}
                         <div
-                            label={(
+                            label={
                                 <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
+                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
                                     <Localize i18n_default_text={localize('Smart analysis')} />
                                 </>
-                            )}
+                            }
                             id='id-analysis'
                             onClick={() => handleLinkChange('analysis')}
                             style={{ cursor: 'pointer' }}
@@ -264,16 +275,12 @@ const AppWrapper = observer(() => {
                         </div>
 
                         <div
-                            label={(
+                            label={
                                 <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
+                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
                                     <Localize i18n_default_text={localize('Analysis tool')} />
                                 </>
-                            )}
+                            }
                             id='id-tool'
                             onClick={() => handleLinkChange('tool')}
                             style={{ cursor: 'pointer' }}
@@ -284,36 +291,30 @@ const AppWrapper = observer(() => {
                         </div>
 
                         <div
-                            label={(
+                            label={
                                 <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
+                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
                                     <Localize i18n_default_text={localize('Free bots')} />
                                 </>
-                            )}
+                            }
                             id='id-bots'
                             onClick={() => handleLinkChange('bots')}
                             style={{ cursor: 'pointer' }}
                         >
-                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}>
+                            <Suspense
+                                fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}
+                            >
                                 <BotsPage />
                             </Suspense>
                         </div>
 
                         <div
-                            label={(
+                            label={
                                 <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
+                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
                                     <Localize i18n_default_text={localize('Copytrade')} />
                                 </>
-                            )}
+                            }
                             id='id-copy'
                             onClick={() => handleLinkChange('copy')}
                             style={{ cursor: 'pointer' }}
@@ -324,16 +325,12 @@ const AppWrapper = observer(() => {
                         </div>
 
                         <div
-                            label={(
+                            label={
                                 <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
+                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
                                     <Localize i18n_default_text={localize('AI')} />
                                 </>
-                            )}
+                            }
                             id='id-ai'
                             onClick={() => handleLinkChange('ai')}
                             style={{ cursor: 'pointer' }}
@@ -344,41 +341,37 @@ const AppWrapper = observer(() => {
                         </div>
 
                         <div
-                            label={(
+                            label={
                                 <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
+                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
                                     <Localize i18n_default_text={localize('Signal')} />
                                 </>
-                            )}
+                            }
                             id='id-signal'
                             onClick={() => handleLinkChange('signal')}
                             style={{ cursor: 'pointer' }}
                         >
-                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Signal page...')} />}>
+                            <Suspense
+                                fallback={<ChunkLoader message={localize('Please wait, loading Signal page...')} />}
+                            >
                                 <SignalPage />
                             </Suspense>
                         </div>
 
                         <div
-                            label={(
+                            label={
                                 <>
-                                    <LegacyGuide1pxIcon
-                                        height='16px'
-                                        width='16px'
-                                        fill='var(--text-general)'
-                                    />
+                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
                                     <Localize i18n_default_text={localize('Invest')} />
                                 </>
-                            )}
+                            }
                             id='id-invest'
                             onClick={() => handleLinkChange('invest')}
                             style={{ cursor: 'pointer' }}
                         >
-                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Invest page...')} />}>
+                            <Suspense
+                                fallback={<ChunkLoader message={localize('Please wait, loading Invest page...')} />}
+                            >
                                 <InvestPage />
                             </Suspense>
                         </div>
