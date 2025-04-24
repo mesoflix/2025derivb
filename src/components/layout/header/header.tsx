@@ -23,7 +23,7 @@ import './header.scss';
 // SBS imports
 import { ArrowDownCircle, ArrowUpCircle, Mail } from 'lucide-react';
 import { useState } from 'react';
-import { Menu } from 'lucide-react'; // Import Menu icon
+import { Menu } from 'lucide-react';
 
 const AppHeader = observer(() => {
     const { isGBLoaded, isGBAvailable } = useIsGrowthbookIsLoaded();
@@ -38,7 +38,7 @@ const AppHeader = observer(() => {
     const currency = getCurrency?.();
     const { localize } = useTranslations();
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // Track menu state
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const renderAccountSection = () => {
         if (isAuthorizing) {
@@ -46,7 +46,6 @@ const AppHeader = observer(() => {
         } else if (activeLoginid) {
             return (
                 <>
-                    {/* <CustomNotifications /> */}
                     {isDesktop &&
                         (() => {
                             const redirect_url = new URL(standalone_routes.personal_details);
@@ -80,11 +79,9 @@ const AppHeader = observer(() => {
                                 text={localize('Manage funds')}
                                 onClick={() => {
                                     let redirect_url = new URL(standalone_routes.wallets_transfer);
-
                                     if (isGBAvailable && isGBLoaded) {
                                         redirect_url = new URL(standalone_routes.recent_transactions);
                                     }
-
                                     if (currency) {
                                         redirect_url.searchParams.set('account', currency);
                                     }
@@ -123,7 +120,7 @@ const AppHeader = observer(() => {
                     <Button
                         primary
                         onClick={() => {
-                            window.open(standalone_routes.signup);
+                            window.open('https://track.deriv.com/_71lZpQSowCdB4VdSfJsOp2Nd7ZgqdRLk/1/', '_blank');
                         }}
                     >
                         <Localize i18n_default_text='Sign up' />
@@ -141,9 +138,12 @@ const AppHeader = observer(() => {
             })}
         >
             <Wrapper variant='left'>
-                <h1 className='app-header__logo'>
-                    <span className='logo__sbs'>SBS</span><span className='logo__matthie'>MATTHIE</span>
-                </h1>
+                {/* New logo section with images */}
+                <div className='custom-logo-wrapper' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <img src='/assets/bull-logo.png' alt='Bull Logo' style={{ height: '32px' }} />
+                    <img src='/assets/poweredbyderiv-badge.png' alt='Powered by Deriv' style={{ height: '20px' }} />
+                </div>
+
                 {isDesktop ? (
                     <div className='mobile-menu'>
                         <button onClick={() => window.location.href = '/withdraw'}>
@@ -161,34 +161,26 @@ const AppHeader = observer(() => {
                     </div>
                 ) : (
                     <div className='mobile-menu-icon'>
-                        <Menu onClick={() => {
-                            alert('hhhhh'); // Check if this alert is triggered
-                            setIsMenuOpen(!isMenuOpen); // Toggle menu state
-                        }} className='mobile-menu-icon__button' />
+                        <Menu
+                            onClick={() => {
+                                setIsMenuOpen(!isMenuOpen);
+                            }}
+                            className='mobile-menu-icon__button'
+                        />
                     </div>
                 )}
 
-                {/* Added background and border for debugging */}
                 {isMenuOpen && !isDesktop && (
                     <div className='mobile-menu' style={{ background: 'rgba(0, 0, 0, 0.7)', border: '2px solid red' }}>
-                        <button onClick={() => {
-                            alert('Withdraw clicked');
-                            window.location.href = '/withdraw';
-                        }}>
+                        <button onClick={() => window.location.href = '/withdraw'}>
                             <ArrowUpCircle className='mobile-menu__icon' />
                             Withdraw
                         </button>
-                        <button onClick={() => {
-                            alert('Deposit clicked');
-                            window.location.href = '/deposit';
-                        }}>
+                        <button onClick={() => window.location.href = '/deposit'}>
                             <ArrowDownCircle className='mobile-menu__icon' />
                             Deposit
                         </button>
-                        <button onClick={() => {
-                            alert('Contact clicked');
-                            window.location.href = '/contact';
-                        }}>
+                        <button onClick={() => window.location.href = '/contact'}>
                             <Mail className='mobile-menu__icon' />
                             Contact
                         </button>
