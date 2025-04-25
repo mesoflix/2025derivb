@@ -13,6 +13,12 @@ import { CONNECTION_STATUS } from '@/external/bot-skeleton/services/api/observab
 import { isDbotRTL } from '@/external/bot-skeleton/utils/workspace';
 import { useApiBase } from '@/hooks/useApiBase';
 import { useStore } from '@/hooks/useStore';
+
+import * as Blockly from 'blockly';
+import { saveWorkspaceToRecent } from '@/utils/save-workspace';
+import { botNotification } from '@/components/bot-notification/bot-notification';
+import { notification_message } from '@/components/bot-notification/bot-notification-utils';
+
 import {
     LabelPairedChartLineCaptionRegularIcon,
     LabelPairedObjectsColumnCaptionRegularIcon,
@@ -21,13 +27,13 @@ import {
 import { LegacyGuide1pxIcon } from '@deriv/quill-icons/Legacy';
 import { Localize, localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
-import RunPanel from '../../components/run-panel';
+import RunPanel from '../../components/run-panel'; //ss
 import ChartModal from '../chart/chart-modal';
 import Dashboard from '../dashboard';
 import RunStrategy from '../dashboard/run-strategy';
 
 const AiPage = lazy(() => import('../ai/ai')); // Assuming you created AiPage.tsx
-const BotsPage = lazy(() => import('../bots/bots')); // Assuming you created BotsPage.tsx
+const BotsPage = lazy(() => import('../bots/freebots')); // Assuming you created BotsPage.tsx
 const SignalPage = lazy(() => import('../signal/signal')); // Assuming you created SignalPage.tsx
 const InvestPage = lazy(() => import('../invest/invest')); // Assuming you created InvestPage.tsx
 const ChartWrapper = lazy(() => import('../chart/chart-wrapper'));
@@ -65,18 +71,7 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = [
-        'dashboard',
-        'bot_builder',
-        'chart',
-        'tutorial',
-        'analysis',
-        'tool',
-        'bots',
-        'ai',
-        'signal',
-        'invest',
-    ];
+    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'analysis', 'tool', 'bots', 'ai', 'signal', 'invest'];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -163,6 +158,26 @@ const AppWrapper = observer(() => {
         [active_tab]
     );
 
+    // Expose the bot selection trigger globally
+    useEffect(() => {
+        const handleBotMessage = (event) => {
+            const { type, filename } = event.data || {};
+
+            if (type === 'botSelect') {
+                handleTabChange(DBOT_TABS.BOT_BUILDER); // Go to bot builder
+
+                setTimeout(() => {
+                    if (filename) {
+                        window.loadBotXmlFile?.(filename);
+                    }
+                }, 500);
+            }
+        };
+
+        window.addEventListener('message', handleBotMessage);
+        return () => window.removeEventListener('message', handleBotMessage);
+    }, []);
+
     const handleLinkChange = (path: string) => {
         navigate(`/${path}`);
     };
@@ -179,11 +194,11 @@ const AppWrapper = observer(() => {
                         active_index={active_tab}
                         className='main__tabs'
                         onTabItemChange={onEntered}
-                        onTabItemClick={tab_index => handleTabChange(tab_index)}
+                        onTabItemClick={(tab_index) => handleTabChange(tab_index)}
                         top
                     >
                         <div
-                            label={
+                            label={(
                                 <>
                                     <LabelPairedObjectsColumnCaptionRegularIcon
                                         height='24px'
@@ -192,14 +207,14 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Dashboard' />
                                 </>
-                            }
+                            )}
                             id='id-dbot-dashboard'
                         >
                             <Dashboard handleTabChange={handleTabChange} />
                         </div>
 
                         <div
-                            label={
+                            label={(
                                 <>
                                     <LabelPairedPuzzlePieceTwoCaptionBoldIcon
                                         height='24px'
@@ -208,12 +223,12 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Bot Builder' />
                                 </>
-                            }
+                            )}
                             id='id-bot-builder'
                         />
 
                         <div
-                            label={
+                            label={(
                                 <>
                                     <LabelPairedChartLineCaptionRegularIcon
                                         height='24px'
@@ -222,12 +237,8 @@ const AppWrapper = observer(() => {
                                     />
                                     <Localize i18n_default_text='Charts' />
                                 </>
-                            }
-                            id={
-                                is_chart_modal_visible || is_trading_view_modal_visible
-                                    ? 'id-charts--disabled'
-                                    : 'id-charts'
-                            }
+                            )}
+                            id={is_chart_modal_visible || is_trading_view_modal_visible ? 'id-charts--disabled' : 'id-charts'}
                         >
                             <Suspense fallback={<ChunkLoader message={localize('Please wait, loading chart...')} />}>
                                 <ChartWrapper show_digits_stats={false} />
@@ -259,12 +270,11 @@ const AppWrapper = observer(() => {
 
                         {/* Add links to new AI, Bots, Signal, and Invest pages */}
                         <div
-                            label={
+                            label={(
                                 <>
-                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
-                                    <Localize i18n_default_text={localize('Smart analysis')} />
+                                    <Localize i18n_default_text={localize('💡 Analysis')} />
                                 </>
-                            }
+                            )}
                             id='id-analysis'
                             onClick={() => handleLinkChange('analysis')}
                             style={{ cursor: 'pointer' }}
@@ -275,12 +285,11 @@ const AppWrapper = observer(() => {
                         </div>
 
                         <div
-                            label={
+                            label={(
                                 <>
-                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
-                                    <Localize i18n_default_text={localize('Analysis tool')} />
+                                    <Localize i18n_default_text={localize('🧲 Tools')} />
                                 </>
-                            }
+                            )}
                             id='id-tool'
                             onClick={() => handleLinkChange('tool')}
                             style={{ cursor: 'pointer' }}
@@ -290,31 +299,46 @@ const AppWrapper = observer(() => {
                             </Suspense>
                         </div>
 
-                        <div
-                            label={
+                        {/*<div
+                            label={(
                                 <>
-                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
-                                    <Localize i18n_default_text={localize('Free bots')} />
+                                    <Localize i18n_default_text={localize('🤖 Bots')} />
                                 </>
-                            }
+                            )}
                             id='id-bots'
                             onClick={() => handleLinkChange('bots')}
                             style={{ cursor: 'pointer' }}
                         >
-                            <Suspense
-                                fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}
-                            >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}>
                                 <BotsPage />
+                            </Suspense>
+                        </div>*/}
+
+                        <div
+                            label={(
+                                <>
+                                    <Localize i18n_default_text={localize('🤖 Bots')} />
+                                </>
+                            )}
+                            id='id-bots'
+                            onClick={() => handleLinkChange('bots')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Bots page...')} />}>
+                                <BotsPage
+                                    onBotSelect={() => {
+                                        handleTabChange(DBOT_TABS.BOT_BUILDER);
+                                    }}
+                                />
                             </Suspense>
                         </div>
 
                         <div
-                            label={
+                            label={(
                                 <>
-                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
-                                    <Localize i18n_default_text={localize('Copytrade')} />
+                                    <Localize i18n_default_text={localize('🤝 CopyTrade')} />
                                 </>
-                            }
+                            )}
                             id='id-copy'
                             onClick={() => handleLinkChange('copy')}
                             style={{ cursor: 'pointer' }}
@@ -325,12 +349,11 @@ const AppWrapper = observer(() => {
                         </div>
 
                         <div
-                            label={
+                            label={(
                                 <>
-                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
-                                    <Localize i18n_default_text={localize('AI')} />
+                                    <Localize i18n_default_text={localize('🕹️ AI')} />
                                 </>
-                            }
+                            )}
                             id='id-ai'
                             onClick={() => handleLinkChange('ai')}
                             style={{ cursor: 'pointer' }}
@@ -341,37 +364,31 @@ const AppWrapper = observer(() => {
                         </div>
 
                         <div
-                            label={
+                            label={(
                                 <>
-                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
-                                    <Localize i18n_default_text={localize('Signal')} />
+                                    <Localize i18n_default_text={localize('📢 Signal')} />
                                 </>
-                            }
+                            )}
                             id='id-signal'
                             onClick={() => handleLinkChange('signal')}
                             style={{ cursor: 'pointer' }}
                         >
-                            <Suspense
-                                fallback={<ChunkLoader message={localize('Please wait, loading Signal page...')} />}
-                            >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Signal page...')} />}>
                                 <SignalPage />
                             </Suspense>
                         </div>
 
                         <div
-                            label={
+                            label={(
                                 <>
-                                    <LegacyGuide1pxIcon height='16px' width='16px' fill='var(--text-general)' />
-                                    <Localize i18n_default_text={localize('Invest')} />
+                                    <Localize i18n_default_text={localize('💼 Invest')} />
                                 </>
-                            }
+                            )}
                             id='id-invest'
                             onClick={() => handleLinkChange('invest')}
                             style={{ cursor: 'pointer' }}
                         >
-                            <Suspense
-                                fallback={<ChunkLoader message={localize('Please wait, loading Invest page...')} />}
-                            >
+                            <Suspense fallback={<ChunkLoader message={localize('Please wait, loading Invest page...')} />}>
                                 <InvestPage />
                             </Suspense>
                         </div>
@@ -379,7 +396,7 @@ const AppWrapper = observer(() => {
                 </div>
             </div>
 
-            <DesktopWrapper>
+            {/*<DesktopWrapper>
                 <div className='main__run-strategy-wrapper'>
                     <RunStrategy />
                     <RunPanel />
@@ -387,7 +404,22 @@ const AppWrapper = observer(() => {
                 <ChartModal />
             </DesktopWrapper>
 
-            <MobileWrapper>{!is_open && <RunPanel />}</MobileWrapper>
+            <MobileWrapper>{!is_open && <RunPanel />}</MobileWrapper>*/}
+
+            <DesktopWrapper>
+                {active_tab === BOT_BUILDER && (
+                    <div className='main__run-strategy-wrapper'>
+                        <RunStrategy />
+                        <RunPanel />
+                    </div>
+                )}
+                <ChartModal />
+            </DesktopWrapper>
+
+            <MobileWrapper>
+                {active_tab === BOT_BUILDER && !is_open && <RunPanel />}
+            </MobileWrapper>
+
 
             <Dialog
                 cancel_button_text={cancel_button_text || localize('Cancel')}
