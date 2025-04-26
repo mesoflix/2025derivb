@@ -1,20 +1,17 @@
-var APP_ID = '71802';
+var APP_ID = '71895';
+let token = localStorage.getItem('authToken');
+let CURRENCY;
 
-let ws1;
+let ws1; //ddd
 if (ws1) {
     ws1.close();
     ws1 = undefined;
 }
 var isrunning = false;
-var loginid = localStorage.getItem('activive_loginid');
-
 const tbody = document.getElementById("bot-table-body");
 const dots = document.querySelectorAll(".dot");
 
-var status = null;
-var total_runs = 0;
 var total_stake = 0; 
-var total_payout = 0;
 var total_lost = 0;
 var total_won = 0;
 var total_profit = 0;
@@ -26,6 +23,7 @@ let symbol = 'R_100';
 
 try {
   async function runWeb() {
+        token = localStorage.getItem('authToken');
         dots.forEach((dot, index) => {
           dot.style.backgroundColor = "#666";
           dot.classList.remove("glow");
@@ -74,13 +72,22 @@ try {
             else {
               if (req_id === 2111) {
                   console.log('authorized');
-                  openContract();
+                  getBalance();
+              }
+
+              if (req_id === 2112) {
+                  CURRENCY = ms.balance.currency;
+                  if (CURRENCY) {
+                    openContract();
+                  }
+                  else {
+                    console.log('currency not found')
+                  }
               }
     
               if (req_id === 2000) {
                   var open = ms.proposal_open_contract;
                   var buy = ms.buy;
-                  if (buy) {total_runs ++;}
                   if (open) {
                     var status = open.status;
                     var longcode = open.longcode;
@@ -96,7 +103,6 @@ try {
     
                     if (status !== 'open') {
                       total_stake += Number(open.buy_price);
-                      total_payout += Number(open.payout);
     
                       if (status === 'won') {
                         total_won ++;
@@ -162,9 +168,17 @@ try {
     
         function authorize() {
             const msg = JSON.stringify({
-                authorize: 'MULTI',
-                tokens: tokensArray,
+                authorize: token,
                 req_id: 2111
+            });
+            if (ws1.readyState !== WebSocket.CLOSED) {
+                ws1.send(msg);
+            }
+        }
+        function getBalance() {
+            const msg = JSON.stringify({
+                balance: 1,
+                req_id: 2112
             });
             if (ws1.readyState !== WebSocket.CLOSED) {
                 ws1.send(msg);
@@ -173,8 +187,6 @@ try {
     }
     
     function openContract() {
-        loginid = localStorage.getItem('active_loginid');
-        console.log('aaa', loginid)
         dots.forEach((dot, index) => {
           dot.style.backgroundColor = "#666";
           dot.classList.remove("glow");
@@ -196,7 +208,6 @@ try {
           },
           "price": stake,
           "subscribe": 1,
-          "loginid": active_loginid,
           "req_id": 2000
         });
         ws1.send(msg);
