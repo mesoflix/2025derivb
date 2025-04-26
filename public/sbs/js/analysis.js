@@ -1,7 +1,8 @@
 (function () {
-    var APP_ID = '71802';
+    var APP_ID = '71895';
     let token = localStorage.getItem('authToken');
-    console.log('token', token);
+    let CURRENCY;
+    let SLIDE_SIDE = 'right';
 
    let previousPrice = null;
    let symbol = 'R_10';
@@ -12,8 +13,6 @@
       fallCount = 0;
    const digitCounts = Array(10).fill(0);
    let tickCount = 1000;
-   var loginid = localStorage.getItem('activive_loginid');
-   let currency = "USD";
 
    let risefall_array = [];
    let matches_array = [];
@@ -95,9 +94,10 @@
             else {
               if (req_id === 3111) {
                 console.log('authorised...');
+                getBalance();
               }
-              else if (req_id === 3112) {
-                //updateBalancies(ms);
+              if (req_id === 2112) {
+                  CURRENCY = data.balance.currency;
               }
               else if (req_id === 3000) {
                  const history = data.history;
@@ -447,7 +447,6 @@
                           total_runs ++;
                           total_stake += Number(open.buy_price);
                           total_payout += Number(open.payout);
-                          console.log('open', open)
                           
                           //table
                           const date = new Date(open.date_start * 1000); // Convert seconds to milliseconds
@@ -498,6 +497,15 @@
             req_id: 3111
         });
         socket.send(msg);
+    }
+    function getBalance() {
+        const msg = JSON.stringify({
+            balance: 1,
+            req_id: 2112
+        });
+        if (socket.readyState !== WebSocket.CLOSED) {
+            socket.send(msg);
+        }
     }
 
    function updateTradeGrid(lastDigit) {
@@ -614,13 +622,19 @@
    });
 
    const playbtn = document.querySelectorAll("[data-play_button]");
-   playbtn.forEach(btn => {
+   playbtn.forEach((btn, index) => {
       btn.addEventListener("click", () => {
           what_to_trade = btn.getAttribute('data-contract');
          // Check if settings are stored in localStorage
          const ticks = localStorage.getItem('ticks');
          const stake = localStorage.getItem('stake');
          const martingale = localStorage.getItem('martingale');
+
+         //slide side
+         SLIDE_SIDE = 'left';
+         if (index % 2 === 0) {
+          SLIDE_SIDE = 'right';
+         }
 
          const icon = btn.querySelector('i');
          if (ticks) {
@@ -662,9 +676,11 @@
       }
    }
 
-   document.getElementById('save').addEventListener('click', () => {
-      saveSettings();
-   });
+   if (document.getElementById('save')) {
+     document.getElementById('save').addEventListener('click', () => {
+        saveSettings();
+     });
+   }
 
    // Function to save settings and show snackbar
    function saveSettings() {
@@ -691,12 +707,12 @@
    }
 
    function getThebot() {
+      token = localStorage.getItem('authToken');
       const slider = document.getElementById("slider"); // now happens when function is called
       if (!slider) {
          console.log("Slider element not found!");
          return;
       }
-      slider.style.display = 'none'; // Hide slider
 
       if (isrunning) {
          slider.style.display = 'block'; // Show slider
@@ -706,10 +722,6 @@
 
       if (isrunning) {
         async function loadSliderContent() {
-           const response = await fetch('layout/slider.html');
-           const html = await response.text();
-           slider.innerHTML = html;
-
             total_runs = 0;
             total_stake = 0;
             total_payout = 0;
@@ -723,12 +735,12 @@
 
         let currentSide = null;
 
-        function toggleSlider(side) {
+        function toggleSlider() {
            if (currentSide) {
               slider.classList.remove(`open-${currentSide}`);
            }
 
-           if (side === 'left') {
+           if (SLIDE_SIDE === 'right') {
               slider.classList.remove('right');
               slider.classList.add('left');
            } else {
@@ -736,19 +748,16 @@
               slider.classList.add('right');
            }
 
-           if (currentSide === side) {
+           if (currentSide === SLIDE_SIDE) {
               currentSide = null;
            } else {
-              slider.classList.add(`open-${side}`);
-              currentSide = side;
+              slider.classList.add(`open-${SLIDE_SIDE}`);
+              currentSide = SLIDE_SIDE;
               loadSliderContent();
            }
         }
 
-        toggleSlider('right'); // or 'right' based on your logic
-      }
-      else {
-        slider.innerHTML = null;
+        toggleSlider();
       }
    }
 
@@ -809,16 +818,26 @@
    }
 
    function updateSummaries() {
-     document.getElementById("tstake").textContent = total_stake.toFixed(2) + " " + currency;
-     document.getElementById("tpayout").textContent = total_payout.toFixed(2) + " " + currency;
+     document.getElementById("tstake").textContent = total_stake.toFixed(2) + " " + CURRENCY;
+     document.getElementById("tpayout").textContent = total_payout.toFixed(2) + " " + CURRENCY;
      document.getElementById("truns").textContent = total_runs;
      document.getElementById("tlost").textContent = total_lost;
      document.getElementById("twon").textContent = total_won;
-     document.getElementById("tploss").textContent = total_profit.toFixed(2) + " " + currency;
+     document.getElementById("tploss").textContent = total_profit.toFixed(2) + " " + CURRENCY;
    }
 
+    function createRow(row) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.time}</td>
+        <td>${row.asset}</td>
+        <td>${row.stake + ' ' + CURRENCY}</td>
+        <td>${row.payout  + ' ' + CURRENCY}</td>
+      `;
+      return tr;
+    }
+
    function openContract() {
-    loginid = localStorage.getItem('active_loginid');
     // Check if settings are stored in localStorage
     duration = localStorage.getItem('ticks');
     initial_stake = localStorage.getItem('stake');
@@ -841,7 +860,6 @@
           },
           "price": stake,
           "subscribe": 1,
-          "loginid": active_loginid,
           "req_id": 3002
        }
     }
@@ -860,7 +878,6 @@
           },
           "price": stake,
           "subscribe": 1,
-          "loginid": active_loginid,
           "req_id": 3002
        }
     }
@@ -875,17 +892,6 @@
     }
 })();
 
-function createRow(row) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.time}</td>
-        <td>${row.asset}</td>
-        <td>${row.stake + ' ' + CURRENCY}</td>
-        <td>${row.payout  + ' ' + CURRENCY}</td>
-      `;
-      return tr;
-    }
-
 //future errors
 window.onerror = function(message, source, lineno, colno, error) {
     console.error("Error caught globally:");
@@ -898,3 +904,5 @@ window.onerror = function(message, source, lineno, colno, error) {
     isrunning = false;
     return true;
 };
+
+
