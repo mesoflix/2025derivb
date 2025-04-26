@@ -5,11 +5,22 @@ import { LabelPairedFileArrowDownCaptionRegularIcon } from '@deriv/quill-icons/L
 import { LabelPairedMoonCaptionRegularIcon } from '@deriv/quill-icons/LabelPaired';
 import { LabelPairedExclamationCaptionRegularIcon } from '@deriv/quill-icons/LabelPaired';
 import { Localize } from '@deriv-com/translations';
-// Import the XML files directly
-import x1 from './bot-files/$Orginal DollarPrinterBot  2025 Version $.xml'; // Correct the import statement
-import x2 from './bot-files/⚡ ProfitMax Encroach Trader 💵.xml';
-import x3 from './bot-files/Alpha Version 2025.xml';
+
 import './freebots.scss';
+
+// Import the XML files directly
+import x1 from './bot-files/Profit Max No Martngale FREE Bot.xml'; // Correct the import statement
+import x2 from './bot-files/ProfitMax Accu Bot Main.xml';
+import x3 from './bot-files/🔥 ProfitMax Apex Trader 🚀📊✨.xml';
+import x4 from './bot-files/🔹 ProfitMax 1$ System 💰🤖.xml';
+import x5 from './bot-files/🚀 ProfitMax Fusion-X 🤖🌠™ 2025.xml';
+import x6 from './bot-files/🚀 ProfitMax Rise & Fall Auto Switch 🔄📈📉.xml';
+import x7 from './bot-files/🤖🎯 The ProfitMax Even_Odd Auto Switch 2025™ 🔄.xml';
+import x8 from './bot-files/🧠📊🔍 ProfitMax Fusion Analyzer™.xml';
+import x9 from './bot-files/⚡ ProfitMax Encroach Trader 💵.xml';
+import x10 from './bot-files/$Orginal DollarPrinterBot  2025 Version $.xml';
+import x11 from './bot-files/Alpha Version 2025.xml';
+import x12 from './bot-files/Updated Version Of Candle Mine🇬🇧.xml';
 
 const FreeBots = observer(() => {
     const { load_modal, dashboard, blockly_store } = useStore();
@@ -19,29 +30,92 @@ const FreeBots = observer(() => {
 
     // Map filenames to their XML content
     const botXmlMap: Record<string, string> = {
-        '$Orginal DollarPrinterBot  2025 Version $.xml': x1,
-        '⚡ ProfitMax Encroach Trader 💵.xml': x2,
-        'Alpha Version 2025.xml': x3,
+        'Profit Max No Martngale FREE Bot.xml': x1,
+        'ProfitMax Accu Bot Main.xml': x2,
+        '🔥 ProfitMax Apex Trader 🚀📊✨.xml': x3,
+        '🔹 ProfitMax 1$ System 💰🤖.xml': x4,
+        '🚀 ProfitMax Fusion-X 🤖🌠™ 2025.xml': x5,
+        '🚀 ProfitMax Rise & Fall Auto Switch 🔄📈📉.xml': x6,
+        '🤖🎯 The ProfitMax Even_Odd Auto Switch 2025™ 🔄.xml': x7,
+        '🧠📊🔍 ProfitMax Fusion Analyzer™.xml': x8,
+        '⚡ ProfitMax Encroach Trader 💵.xml': x9,
+        '$Orginal DollarPrinterBot  2025 Version $.xml': x10,
+        'Alpha Version 2025.xml': x11,
+        'Updated Version Of Candle Mine🇬🇧.xml': x12,
     };
 
     const bots = [
         {
-            name: '$Orginal DollarPrinterBot  2025 Version $',
-            description: 'Some description some description some description',
-            file: '$Orginal DollarPrinterBot  2025 Version $.xml',
+            name: 'Profit Max No Martngale FREE Bot',
+            description: 'Profit Max No Martngale FREE Bot',
+            file: 'Profit Max No Martngale FREE Bot.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'ProfitMax Accu Bot Main',
+            description: 'ProfitMax Accu Bot Main',
+            file: 'ProfitMax Accu Bot Main.xml',
+            icon: '🤖',
+        },
+        {
+            name: '🔥 ProfitMax Apex Trader 🚀📊✨',
+            description: '🔥 ProfitMax Apex Trader 🚀📊✨',
+            file: '🔥 ProfitMax Apex Trader 🚀📊✨.xml',
+            icon: '🤖',
+        },
+        {
+            name: '🔹 ProfitMax 1$ System 💰🤖',
+            description: '🔹 ProfitMax 1$ System 💰🤖',
+            file: '🔹 ProfitMax 1$ System 💰🤖.xml',
+            icon: '🤖',
+        },
+        {
+            name: '🚀 ProfitMax Fusion-X 🤖🌠™ 2025',
+            description: '🚀 ProfitMax Fusion-X 🤖🌠™ 2025',
+            file: '🚀 ProfitMax Fusion-X 🤖🌠™ 2025.xml',
+            icon: '🤖',
+        },
+        {
+            name: '🚀 ProfitMax Rise & Fall Auto Switch 🔄📈📉',
+            description: '🚀 ProfitMax Rise & Fall Auto Switch 🔄📈📉',
+            file: '🚀 ProfitMax Rise & Fall Auto Switch 🔄📈📉.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'x🤖🎯 The ProfitMax Even_Odd Auto Switch 2025™ 🔄xx',
+            description: '🤖🎯 The ProfitMax Even_Odd Auto Switch 2025™ 🔄',
+            file: '🤖🎯 The ProfitMax Even_Odd Auto Switch 2025™ 🔄.xml',
+            icon: '🤖',
+        },
+        {
+            name: '🧠📊🔍 ProfitMax Fusion Analyzer™',
+            description: '🧠📊🔍 ProfitMax Fusion Analyzer™',
+            file: '🧠📊🔍 ProfitMax Fusion Analyzer™.xml',
             icon: '🤖',
         },
         {
             name: '⚡ ProfitMax Encroach Trader 💵',
-            description: 'Some description some description some description',
+            description: '⚡ ProfitMax Encroach Trader 💵',
             file: '⚡ ProfitMax Encroach Trader 💵.xml',
-            icon: '📈',
+            icon: '🤖',
+        },
+        {
+            name: '$Orginal DollarPrinterBot  2025 Version $',
+            description: '$Orginal DollarPrinterBot  2025 Version $',
+            file: '$Orginal DollarPrinterBot  2025 Version $.xml',
+            icon: '🤖',
         },
         {
             name: 'Alpha Version 2025',
-            description: 'Some description some description some description',
+            description: 'Alpha Version 2025',
             file: 'Alpha Version 2025.xml',
-            icon: '💹',
+            icon: '🤖',
+        },
+        {
+            name: 'Updated Version Of Candle Mine🇬🇧',
+            description: 'Updated Version Of Candle Mine🇬🇧',
+            file: 'Updated Version Of Candle Mine🇬🇧.xml',
+            icon: '🤖',
         },
     ];
 
