@@ -396,7 +396,7 @@ const AppWrapper = observer(() => {
                 </div>
             </div>
 
-            {/*<DesktopWrapper>
+            <DesktopWrapper>
                 <div className='main__run-strategy-wrapper'>
                     <RunStrategy />
                     <RunPanel />
@@ -404,22 +404,7 @@ const AppWrapper = observer(() => {
                 <ChartModal />
             </DesktopWrapper>
 
-            <MobileWrapper>{!is_open && <RunPanel />}</MobileWrapper>*/}
-
-            <DesktopWrapper>
-                {active_tab === BOT_BUILDER && (
-                    <div className='main__run-strategy-wrapper'>
-                        <RunStrategy />
-                        <RunPanel />
-                    </div>
-                )}
-                <ChartModal />
-            </DesktopWrapper>
-
-            <MobileWrapper>
-                {active_tab === BOT_BUILDER && !is_open && <RunPanel />}
-            </MobileWrapper>
-
+            <MobileWrapper>{!is_open && <RunPanel />}</MobileWrapper>
 
             <Dialog
                 cancel_button_text={cancel_button_text || localize('Cancel')}
