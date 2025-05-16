@@ -1,4 +1,4 @@
-var APP_ID = '71895';
+var APP_ID = '75771';
 let token = localStorage.getItem('authToken');
 let CURRENCY;
 
